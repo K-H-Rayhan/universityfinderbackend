@@ -2,7 +2,7 @@
 
 University finding app to simplify the struggle of finding a university.
 
-- Copy universityfinderfrontend and paste it inside client
+- Copy [universityfinderfrontend](https://github.com/K-H-Rayhan/universityfinderfrontend) and paste it inside client folder
 - Then import our finduniversity db inside phpmyadmin
 - And start server from xampp then
 
