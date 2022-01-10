@@ -10,3 +10,8 @@ University finding app to simplify the struggle of finding a university.
 ```
 npm run dev
 ```
+## For admin panel
+
+# Sign in using
+- Email: admin@admin.com
+- Password: admin
