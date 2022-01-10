@@ -12,6 +12,6 @@ npm run dev
 ```
 ## For admin panel
 
-# Sign in using
+### Sign in using
 - Email: admin@admin.com
 - Password: admin
