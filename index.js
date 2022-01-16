@@ -139,11 +139,29 @@ app.get("/api/filter", function (req, res) {
   console.log(sscgpa, hscgpa, location, department);
   if (location == "Bangladesh") {
     con.query(
-      `SELECT *
-      FROM university, university_department, departments
-      where university.univeristy_id = university_department.univeristy_id AND departments.department_name='${department}' AND university.university_ssc<=${sscgpa} AND university.university_hsc<=${hscgpa} AND university.university_total<=${
+      `SELECT
+      *
+  FROM
+      (
+        SELECT
+        university.university_name,
+        university.university_hsc,
+        university.university_ssc,
+        university.univeristy_qsranking,
+        departments.department_name,
+        university.university_total,
+        university.university_location,
+        university.univeristy_id
+    FROM
+        university_department
+    LEFT JOIN university ON university.univeristy_id = university_department.univeristy_id
+    LEFT JOIN departments ON university_department.department_id = departments.department_id
+  ) AS t
+  WHERE
+  t.department_name='${department}' AND t.university_ssc<=${sscgpa} AND t.university_hsc<=${hscgpa} AND t.university_total<=${
         parseInt(sscgpa) + parseInt(hscgpa)
-      }`,
+      }
+  `,
       function (err, result, fields) {
         if (err) console.log(err);
         //   console.log(result);
@@ -153,11 +171,28 @@ app.get("/api/filter", function (req, res) {
   } else {
     console.log(parseInt(sscgpa) + parseInt(hscgpa));
     con.query(
-      `SELECT *
-      FROM university, university_department, departments
-      where university.univeristy_id = university_department.univeristy_id AND departments.department_name='${department}' AND university.university_ssc<=${sscgpa} AND university.university_hsc<=${hscgpa} AND university.university_total<=${
+      `SELECT
+      *
+  FROM
+      (
+        SELECT
+        university.university_name,
+        university.university_hsc,
+        university.university_ssc,
+        university.univeristy_qsranking,
+        departments.department_name,
+        university.university_total,
+        university.university_location
+    FROM
+        university_department
+    LEFT JOIN university ON university.univeristy_id = university_department.univeristy_id
+    LEFT JOIN departments ON university_department.department_id = departments.department_id
+  ) AS t
+  WHERE
+  t.department_name='${department}' AND t.university_ssc<=${sscgpa} AND t.university_hsc<=${hscgpa} AND t.university_total<=${
         parseInt(sscgpa) + parseInt(hscgpa)
-      } AND university.university_location='${location}'`,
+      } AND t.university_location='${location}'
+  `,
       function (err, result, fields) {
         if (err) console.log(err);
         //   console.log(result);
@@ -290,6 +325,29 @@ app.delete("/api/admin/universities", (req, res) => {
   } catch (e) {
     console.log(e);
   }
+});
+
+app.get("/api/count", function (req, res) {
+  con.query(
+    `SELECT COUNT(*) as count FROM university WHERE 1;
+  `,
+    function (err, result) {
+      if (err) console.log(err);
+      //   console.log(result);
+      res.send(result[0]);
+    }
+  );
+});
+app.get("/api/notice", function (req, res) {
+  con.query(
+    `SELECT * FROM notice WHERE 1;
+  `,
+    function (err, result) {
+      if (err) console.log(err);
+      //   console.log(result);
+      res.send(result);
+    }
+  );
 });
 
 app.listen(port);
